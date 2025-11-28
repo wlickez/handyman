@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="HandyMan.API/HandyMan.API.csproj" Id="a6f726c7-a169-4c9e-bfec-3ec038abef4c" />
+  <Project Path="HandyMan.MVC/HandyMan.MVC.csproj" />
+</Solution>

@@ -1,3 +1,7 @@
+using HandyMan.API.Interfaces;
+using HandyMan.API.Models;
+using HandyMan.API.Models.Helpers;
+using HandyMan.API.Services;
 
 namespace HandyMan.API
 {
@@ -13,6 +17,10 @@ namespace HandyMan.API
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
+            builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
+            builder.Services.AddScoped(typeof(IDBService<>), typeof(DBService<>));
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -27,7 +35,6 @@ namespace HandyMan.API
 
 
             app.MapControllers();
-
             app.Run();
         }
     }

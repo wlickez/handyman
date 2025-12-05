@@ -8,9 +8,9 @@ namespace HandyMan.API.Interfaces
     {
         IDbTransaction IniciarTransaccion(IsolationLevel isolationLevel, string transactionName = null);
         Task<IEnumerable<T>> SelectEntity(string sqlString, bool isSP = false, List<ParametroSql>? parametros = null, IDbTransaction? transaction = null);
-        Task<int> InsertEntity(string sqlString, bool isSP = false, List<ParametroSql>? parametros = null, IDbTransaction? transaction = null);
+        Task<string> InsertEntity(string sqlString, bool isSP = false, List<ParametroSql>? parametros = null, IDbTransaction? transaction = null);
 
-        Task<int> UpdateEntity(string sqlString, T entity);
+        Task<string> UpdateEntity(string sqlString, bool isSP = false, List<ParametroSql>? parametros = null, IDbTransaction? transaction = null);
         Task AgregarParametros(SqlCommand comando, List<ParametroSql> parametros);
     }
 }

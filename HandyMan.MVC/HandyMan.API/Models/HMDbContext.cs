@@ -6,16 +6,13 @@ namespace HandyMan.API.Models;
 
 public partial class HMDbContext : DbContext
 {
-    private readonly IConfiguration _configuration;
-    public HMDbContext(IConfiguration configuration)
+    public HMDbContext()
     {
-        _configuration = configuration;
     }
 
-    public HMDbContext(IConfiguration configuration, DbContextOptions<HMDbContext> options)
+    public HMDbContext(DbContextOptions<HMDbContext> options)
         : base(options)
     {
-        _configuration = configuration;
     }
 
     public virtual DbSet<HandymanContract> HandymanContracts { get; set; }
@@ -35,8 +32,8 @@ public partial class HMDbContext : DbContext
     public virtual DbSet<HandymanUser> HandymanUsers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-
-        => optionsBuilder.UseSqlServer(_configuration.GetValue<string>("AppSettings.ConnectionString"));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=tcp:sql-server-farmacias-mi-salud.database.windows.net;Database=sql-bd-farmacias-mi-salud;User Id=wlickez;Password=Pascal2020,.-;Trusted_Connection=False;Encrypt=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -44,7 +41,8 @@ public partial class HMDbContext : DbContext
         {
             entity.ToTable("HANDYMAN.CONTRACT");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.HasIndex(e => new { e.ProviderId, e.StatusId, e.TaskId, e.UserId }, "IX_HANDYMAN.CONTRACT").IsUnique();
+
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.OriginalText).IsUnicode(false);
 
@@ -73,7 +71,6 @@ public partial class HMDbContext : DbContext
         {
             entity.ToTable("HANDYMAN.PAYMENT");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Description)
                 .HasMaxLength(150)
                 .IsUnicode(false);
@@ -90,7 +87,6 @@ public partial class HMDbContext : DbContext
 
             entity.HasIndex(e => e.Email, "IX_HANDYMAN.PROVIDER").IsUnique();
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.DocumentId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -126,7 +122,8 @@ public partial class HMDbContext : DbContext
 
             entity.ToTable("HANDYMAN.STATUS");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.HasIndex(e => e.Description, "IX_HANDYMAN.STATUS").IsUnique();
+
             entity.Property(e => e.Description)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -136,7 +133,6 @@ public partial class HMDbContext : DbContext
         {
             entity.ToTable("HANDYMAN.TASK");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CompletedDate).HasColumnType("datetime");
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.Description)
@@ -180,6 +176,7 @@ public partial class HMDbContext : DbContext
 
             entity.ToTable("HANDYMAN.TASK_BUDGET");
 
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.Amout).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Description).IsUnicode(false);
 
@@ -193,7 +190,6 @@ public partial class HMDbContext : DbContext
         {
             entity.ToTable("HANDYMAN.TASK_CATEGORY");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .IsUnicode(false);
@@ -210,7 +206,6 @@ public partial class HMDbContext : DbContext
 
             entity.HasIndex(e => e.Email, "IX_HANDYMAN.USER").IsUnique();
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.DocumentId)
                 .HasMaxLength(255)
                 .IsUnicode(false)

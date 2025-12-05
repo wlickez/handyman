@@ -4,9 +4,9 @@
     public class ResponseBuilder<T>
     {
         private bool _isSuccess;
-        private string _message;
+        private string _message;        
         private List<T> _result;
-
+        
         public ResponseBuilder<T> SetSuccess(bool isSuccess)
         {
             _isSuccess = isSuccess;

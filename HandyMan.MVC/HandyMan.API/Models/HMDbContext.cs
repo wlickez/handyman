@@ -15,6 +15,8 @@ public partial class HMDbContext : DbContext
     {
     }
 
+    public virtual DbSet<HandymanAddress> HandymanAddresses { get; set; }
+
     public virtual DbSet<HandymanContract> HandymanContracts { get; set; }
 
     public virtual DbSet<HandymanPayment> HandymanPayments { get; set; }
@@ -31,12 +33,24 @@ public partial class HMDbContext : DbContext
 
     public virtual DbSet<HandymanUser> HandymanUsers { get; set; }
 
+    public virtual DbSet<HandymanUserAddress> HandymanUserAddresses { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=tcp:sql-server-farmacias-mi-salud.database.windows.net;Database=sql-bd-farmacias-mi-salud;User Id=wlickez;Password=Pascal2020,.-;Trusted_Connection=False;Encrypt=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<HandymanAddress>(entity =>
+        {
+            entity.ToTable("HANDYMAN.ADDRESS");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Address)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<HandymanContract>(entity =>
         {
             entity.ToTable("HANDYMAN.CONTRACT");
@@ -235,6 +249,23 @@ public partial class HMDbContext : DbContext
                 .HasForeignKey(d => d.StatusId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("USER_TO_STATUS");
+        });
+
+        modelBuilder.Entity<HandymanUserAddress>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("HANDYMAN.USER_ADDRESS");
+
+            entity.HasOne(d => d.Addres).WithMany()
+                .HasForeignKey(d => d.AddresId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_USER_ADDRESS_HANDYMAN.ADDRESS");
+
+            entity.HasOne(d => d.AddresNavigation).WithMany()
+                .HasForeignKey(d => d.AddresId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("USERADRRES_TO_USER");
         });
 
         OnModelCreatingPartial(modelBuilder);

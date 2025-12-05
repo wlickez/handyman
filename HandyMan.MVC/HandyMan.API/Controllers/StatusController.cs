@@ -30,7 +30,7 @@ namespace HandyMan.API.Controllers
                             .SetMessage("Statuses retrieved successfully")
                             .SetResult(statuses.ToList())                            
                             .Build();
-                return Ok(statuses);
+                return Ok(_response);
             }
             catch (Exception ex)
             {

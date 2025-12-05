@@ -10,7 +10,7 @@
         public Response(bool isSuccess, string message, List<T> result)
         {
             IsSuccess = isSuccess;
-            Message = string.Concat(isSuccess ? "Solicitud ejecutada con éxito" : "Ha ocurrido un error. ", message);
+            Message = string.Concat(isSuccess ? "Solicitud ejecutada con éxito. " : "Ha ocurrido un error. ", message);
             Result = result;
             AmountItems = result == null ? 0 : result.Count;
         }

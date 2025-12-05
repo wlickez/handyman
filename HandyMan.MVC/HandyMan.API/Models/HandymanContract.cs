@@ -13,13 +13,13 @@ public partial class HandymanContract
 
     public long TaskId { get; set; }
 
+    public int StatusId { get; set; }
+
     public string OriginalText { get; set; } = null!;
 
     public DateTime CreatedDate { get; set; }
 
     public byte[]? SignedFile { get; set; }
-
-    public int StatusId { get; set; }
 
     public virtual ICollection<HandymanTask> HandymanTasks { get; set; } = new List<HandymanTask>();
 

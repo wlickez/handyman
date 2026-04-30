@@ -19,7 +19,7 @@ namespace HandyMan.API
 
             builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
-            builder.Services.AddScoped(typeof(IDBService<>), typeof(DBService<>));
+            builder.Services.AddScoped(typeof(IDBService<>), typeof(BDServiceMySql<>));
 
             var app = builder.Build();
 

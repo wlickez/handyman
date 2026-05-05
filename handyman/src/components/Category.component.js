@@ -3,8 +3,10 @@ import { Card, Image } from "react-bootstrap";
 const CategoryComponent = ({ name, icon }) => {
     return (
         <div className="m-3">
-            <Card>
-                <Card.Img variant="top" src={icon}></Card.Img>
+            <Card style={{width: "130px"}}> 
+                <a href="https://example.com" target="_blank" rel="noreferrer">
+                    <Card.Img variant="bottom" src={icon} style={{ height: "80px", objectFit: "contain" }}></Card.Img>
+                </a>
                 <Card.Body>
                     <Card.Text>{name}</Card.Text>
                 </Card.Body>

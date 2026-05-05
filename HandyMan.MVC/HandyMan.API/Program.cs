@@ -19,8 +19,20 @@ namespace HandyMan.API
 
             builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
-            builder.Services.AddScoped(typeof(IDBService<>), typeof(BDServiceMySql<>));
+            builder.Services.AddScoped(typeof(IDBService<>), typeof(DBService<>));
 
+            builder.Services.AddSwaggerGen();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                        
+                });
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -33,6 +45,12 @@ namespace HandyMan.API
 
             app.UseAuthorization();
 
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+            app.UseCors("CorsPolicy");
 
             app.MapControllers();
             app.Run();

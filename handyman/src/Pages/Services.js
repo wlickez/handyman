@@ -1,12 +1,49 @@
-import React from "react";
-import { Card, CardBody, CardHeader, CardText, CardTitle } from 'react-bootstrap'
-export default function Services() {
+import React, { useEffect, useState } from "react";
+import { Card, CardBody, CardHeader, CardText, CardTitle, Row, Col } from 'react-bootstrap'
+import apiService from "../services/apiFetchService";
+import CategoryComponent from "../components/Category.component";
+import TextAreaInput from "../components/IntputTextArea.component";
+
+function Services() {
+
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        apiService.get("categories?top=50")
+            .then(data => {
+                console.log(data);
+                setItems(data);
+            })
+            .catch(error => console.log(error));
+    }, []);
+
     return (
-        <Card>
-            <CardBody>
-                <CardTitle>Servicios</CardTitle>
-                <CardText>Nuestros servicios</CardText>
-            </CardBody>
-        </Card>
+        <>
+            <h2 className="text-center">Nuestros servicios</h2>
+            <div className="row">
+                <div className="col-8 text-center">
+                    <TextAreaInput placeholder="Buscas algún servicio en especial?"></TextAreaInput>
+                </div>
+            </div>
+            <Row>
+
+                {
+                    items.map((e, i) => (
+                        <Col key={i} xs={12} sm={6} md={4} lg={3}>
+                            <Card style={{ width: '18rem', padding: "10px", margin: "10px" }}>
+                            <Card.Img variant="bottom" src={e.icon} style={{ height: "150px", objectFit: "contain" }}></Card.Img>
+                            <Card.Body>
+                                <Card.Title>{e.description}</Card.Title>
+                                <Card.Text></Card.Text>
+                            </Card.Body>
+                        </Card>
+                        </Col>
+                    ))
+                }
+            </Row>
+        </>
+
     );
 }
+
+export default Services;

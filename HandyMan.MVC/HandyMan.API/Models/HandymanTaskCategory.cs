@@ -10,6 +10,7 @@ public partial class HandymanTaskCategory
     public string Description { get; set; } = null!;
 
     public int StatusId { get; set; }
+    public string Icon { get; set; }
 
     public virtual ICollection<HandymanTask> HandymanTasks { get; set; } = new List<HandymanTask>();
 

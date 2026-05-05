@@ -208,6 +208,10 @@ public partial class HMDbContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false);
 
+            entity.Property(e => e.Icon)
+                .HasMaxLength(300)
+                .IsUnicode(false);
+
             entity.HasOne(d => d.Status).WithMany(p => p.HandymanTaskCategories)
                 .HasForeignKey(d => d.StatusId)
                 .OnDelete(DeleteBehavior.ClientSetNull)

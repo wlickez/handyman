@@ -9,15 +9,11 @@ function App() {
   return (
     <>
       <NavbarComponent></NavbarComponent>
-
-      
-        <Routes>
-          <Route path='/' element={<Home></Home>}></Route>
-          <Route path='/servicios' element={<Services></Services>}></Route>
-          <Route path='/login' element={<Home></Home>}></Route>
-          <Route path='/tasker' element={<Home></Home>}></Route>
-        </Routes>
-      
+      <Routes>
+        <Route path='/' element={<Home></Home>}></Route>
+        <Route path='/servicios' element={<Services></Services>}></Route>
+        <Route path='/tasker' element={<Home></Home>}></Route>
+      </Routes>
     </>
   );
 }

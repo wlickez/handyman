@@ -15,7 +15,7 @@ const NavbarComponent = () => {
             <Nav.Link href="/">Inicio</Nav.Link>
             <Nav.Link href="/servicios">Servicios</Nav.Link>
             <Nav.Link href="/tasker">Proveedor</Nav.Link>
-            <Nav.Link href="/login"></Nav.Link>
+            <Nav.Link href="/login">Login</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

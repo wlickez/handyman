@@ -17,7 +17,7 @@ class ApiFetchService {
 
     async post(complemento, body) {
 
-        const response = await fetch(`${this.baseURL}${complemento}`, {
+        const response = await fetch(`${this.baseUrl}${complemento}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

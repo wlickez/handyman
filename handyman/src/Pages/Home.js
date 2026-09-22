@@ -7,7 +7,7 @@ import apiService from "../services/apiFetchService";
 function Home() {
     const [items, setItems] = useState([]);
     useEffect(() => {
-        apiService.get("categories")
+        apiService.get("categories?top=5")
             .then(data => {
                 console.log(data);
                 setItems(data);

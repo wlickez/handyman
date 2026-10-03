@@ -79,6 +79,7 @@ packages/
 *.tmp
 *.bak
 *.swp
+node_modules/
 
 # Publish output
 publish/

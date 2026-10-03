@@ -1,19 +1,39 @@
 import './App.css';
-import { useState, useEffect, React } from "react";
-import NavbarComponent from './NavBar/NavbarComponent';
-import { Route, Router, Routes } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './Pages/Home';
+import Login2 from './Pages/Login2';
+import PrivateRoute from './Routes/PrivateRoute';
 import Services from './Pages/Services';
+import Layout from './components/Layout.Component';
 
 function App() {
   return (
     <>
-      <NavbarComponent></NavbarComponent>
-      <Routes>
-        <Route path='/' element={<Home></Home>}></Route>
-        <Route path='/servicios' element={<Services></Services>}></Route>
-        <Route path='/tasker' element={<Home></Home>}></Route>
-      </Routes>
+      <BrowserRouter>
+        <Route path='/' element={<Login2></Login2>}></Route>
+
+        <Route path='/home' element={
+          <PrivateRoute>
+            <Layout></Layout>
+            <Home></Home>
+          </PrivateRoute>
+        }>
+          <Route path='/servicios' element={
+            <PrivateRoute>
+              <Layout></Layout>
+              <Services></Services>
+            </PrivateRoute>
+          }></Route>
+          <Route path='/taskers'
+            element={
+              <PrivateRoute>
+                <Layout></Layout>
+                <Home></Home>
+              </PrivateRoute>
+            }>
+          </Route>
+        </Route>
+      </BrowserRouter>
     </>
   );
 }

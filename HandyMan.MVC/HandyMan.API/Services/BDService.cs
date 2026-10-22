@@ -9,23 +9,26 @@ namespace HandyMan.API.Services
 
     public class DBService<T> : IDBService<T>
     {
-        private SqlConnection ConexionBD;
+        private readonly string _connectionString;
         private readonly IConfiguration _configuration;
-
         public DBService(IConfiguration configuration)
         {
             _configuration = configuration;
+            _connectionString = _configuration["AppSettings:ConnectionString"];
+            
+        }
+
+        private SqlConnection CrearConexion()
+        {
             try
             {
-                ConexionBD = new SqlConnection(_configuration["AppSettings:ConnectionString"]);
-                ConexionBD.Open();
+                return new SqlConnection(_connectionString);
             }
             catch (Exception)
             {
-
+                throw;
             }
         }
-
         public async Task AgregarParametros(SqlCommand comando, List<ParametroSql> parametros)
         {
             if (parametros != null)            
@@ -53,9 +56,11 @@ namespace HandyMan.API.Services
             
             if(parametros != null)            
                 foreach (var parametro in parametros)                
-                    pars.Add(parametro.Nombre, parametro.Valor);   
+                    pars.Add(parametro.Nombre, parametro.Valor);
 
-            return await ConexionBD.QueryAsync<T>(sqlString, pars, transaction: transaction, commandType: (isSP) ? CommandType.StoredProcedure : CommandType.Text);
+            var connection = CrearConexion();
+
+            return await connection.QueryAsync<T>(sqlString, pars, transaction: transaction, commandType: (isSP) ? CommandType.StoredProcedure : CommandType.Text);
         }
 
         public async Task<string> InsertEntity(string sqlString, bool isSP = false, List<ParametroSql>? parametros = null, IDbTransaction? transaction = null)
@@ -66,9 +71,10 @@ namespace HandyMan.API.Services
                 if (parametros != null)                
                     foreach (var parametro in parametros)
                         pars.Add(parametro.Nombre, parametro.Valor);
-                
-                
-                int inserted = await ConexionBD.ExecuteAsync(sqlString, pars, transaction, commandType: (isSP) ? CommandType.StoredProcedure : CommandType.Text);
+
+                var connection = CrearConexion();
+
+                int inserted = await connection.ExecuteAsync(sqlString, pars, transaction, commandType: (isSP) ? CommandType.StoredProcedure : CommandType.Text);
                 if (inserted == 0)
                     throw new Exception("No se logró realizar la inserción");
 
@@ -89,8 +95,9 @@ namespace HandyMan.API.Services
                     foreach (var parametro in parametros)
                         pars.Add(parametro.Nombre, parametro.Valor);
 
+                var connection = CrearConexion();
 
-                int inserted = await ConexionBD.ExecuteAsync(sqlString, pars, transaction, commandType: (isSP) ? CommandType.StoredProcedure : CommandType.Text);
+                int inserted = await connection.ExecuteAsync(sqlString, pars, transaction, commandType: (isSP) ? CommandType.StoredProcedure : CommandType.Text);
                 if (inserted == 0)
                     throw new Exception("No se logró realizar la inserción");
 
@@ -106,23 +113,14 @@ namespace HandyMan.API.Services
         {
             try
             {
-                var transaction = ConexionBD.BeginTransaction(isolationLevel);
+                var connection = CrearConexion();
+                var transaction = connection.BeginTransaction(isolationLevel);
                 return transaction;
             }
             catch (Exception ex)
             {
                 return null;
             }
-        }
-
-        public void Dispose()
-        {
-            if (ConexionBD != null)
-            {
-                if (ConexionBD.State == ConnectionState.Open)
-                    ConexionBD.Close();
-                ConexionBD.Dispose();
-            }
-        }
+        }      
     }
 }

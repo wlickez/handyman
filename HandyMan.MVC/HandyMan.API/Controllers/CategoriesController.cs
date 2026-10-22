@@ -1,6 +1,8 @@
 ﻿using HandyMan.API.Interfaces;
 using HandyMan.API.Models;
 using HandyMan.API.Models.Helpers;
+using HandyMan.API.Models.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +21,7 @@ namespace HandyMan.API.Controllers
             _configuration = configuration;
         }
         [HttpGet]
-        public async Task<IActionResult> GetCategories(int top = 10)   
+        public async Task<IActionResult> GetCategories(int top = 10)
         {
             try
             {
@@ -36,6 +38,44 @@ namespace HandyMan.API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(503, new ResponseBuilder<HandymanTaskCategory>().SetMessage(ex.Message).Build());
+            }
+        }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequest category)
+        {
+            try
+            {
+                string result = await _dBService.InsertEntity(
+                    "insert into [HANDYMAN.TASK_CATEGORY] (Description, Icon, StatusId) " +
+                    "values (@description, @icon, 1)",
+                    false,
+                    [
+                        new ParametroSql("@description", category.Description),
+                            new ParametroSql("@icon", category.Icon)
+                    ],
+                    null);
+
+                if (!string.IsNullOrEmpty(result))
+                    return StatusCode(503, new ResponseBuilder<string>()
+                        .SetSuccess(false)
+                        .SetMessage(result)
+                        .SetResult([""])
+                        .Build());
+
+                return Ok(new ResponseBuilder<string>()
+                    .SetSuccess(true)
+                    .SetMessage("Categoría creada correctamente.")
+                    .SetResult([""])
+                    .Build());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new ResponseBuilder<string>()
+                    .SetSuccess(false)
+                    .SetMessage(ex.Message)
+                    .SetResult([""])
+                    .Build());
             }
         }
     }

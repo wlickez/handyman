@@ -1,6 +1,6 @@
 import { SetStateAction, useEffect, useState } from "react";
 import { Button, Form, InputGroup } from "react-bootstrap";
-import { FaSearch } from "react-icons/fa";
+
 
 type TextAreaInputProps = {
   placeholder: string;
@@ -28,6 +28,8 @@ const TextAreaInput = ({ placeholder, onChange }: TextAreaInputProps) => {
     if (placeholder === "Buscas algún servicio en especial?") 
         placeholder = "Busca algún servicio en especial?";
 
+    placeholder = "Filtrar por...";
+
     return (
         <>
             <InputGroup>
@@ -42,6 +44,7 @@ const TextAreaInput = ({ placeholder, onChange }: TextAreaInputProps) => {
 
                 </Button>
             </InputGroup>
+
         </>
     );
 };

@@ -2,6 +2,10 @@ using HandyMan.API.Interfaces;
 using HandyMan.API.Models;
 using HandyMan.API.Models.Helpers;
 using HandyMan.API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.Text;
 
 namespace HandyMan.API
 {
@@ -14,6 +18,24 @@ namespace HandyMan.API
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidateAudience = true,
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+                        ValidateLifetime = true,
+                        NameClaimType = ClaimTypes.Name,
+                    };
+                });
+            builder.Services.AddAuthorization();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
@@ -43,6 +65,8 @@ namespace HandyMan.API
 
             app.UseHttpsRedirection();
 
+            app.UseCors("CorsPolicy");
+            app.UseAuthentication();
             app.UseAuthorization();
 
             if (app.Environment.IsDevelopment())
@@ -50,8 +74,6 @@ namespace HandyMan.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            app.UseCors("CorsPolicy");
-
             app.MapControllers();
             app.Run();
         }

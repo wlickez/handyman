@@ -11,22 +11,30 @@ class ApiFetchService {
   }
 
   async get<T = unknown>(complemento: string): Promise<T> {
-    const response = await fetch(`${this.baseUrl}${complemento}`);
+    const response = await fetch(`${this.baseUrl}${complemento}`, {
+      headers: this.getHeaders(),
+    });
     return (await response.json()) as T;
   }
 
   async post<T = unknown>(complemento: string, body: unknown): Promise<T> {
     const response = await fetch(`${this.baseUrl}${complemento}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: this.getHeaders(),
       body: JSON.stringify(body),
     });
 
     const data = await response.json();
 
     return (data) as T;
+  }
+
+  private getHeaders(): HeadersInit {
+    const token = localStorage.getItem("token");
+    return {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
   }
 }
 

@@ -24,6 +24,8 @@ public partial class HandymanUser
 
     public string Email { get; set; } = null!;
 
+    public string Password { get; set; } = null!;
+
     public int StatusId { get; set; }
 
     public DateTime? LastDateTask { get; set; }

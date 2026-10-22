@@ -1,12 +1,14 @@
 import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Alert, Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import apiService from "../Services/ApiFetchService";
 import ResponseApi from "../Models/ResponseApi";
 
 export default function Login() {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
+  const location = useLocation();
+  const signupSuccess = (location.state as { signupSuccess?: boolean } | null)?.signupSuccess;
   const navigate = useNavigate();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -31,6 +33,9 @@ export default function Login() {
           <Card>
             <Card.Body>
               <h3>Iniciar Sesión</h3>
+              {signupSuccess && (
+                <Alert variant="success">Tu cuenta fue creada. Ya puedes iniciar sesión.</Alert>
+              )}
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
                   <Form.Label>Usuario</Form.Label>
@@ -50,6 +55,9 @@ export default function Login() {
                 <Button type="submit" className="w-100">
                   Ingresar
                 </Button>
+                <p className="mt-3 mb-0 text-center">
+                  ¿No tienes una cuenta? <Link to="/signup">Regístrate</Link>
+                </p>
               </Form>
             </Card.Body>
           </Card>

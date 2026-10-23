@@ -22,7 +22,7 @@ export default function NavbarComponent() {
           className="btn btn-danger"
           onClick={() => {
             localStorage.removeItem("token");
-            n("/");
+            n("/", { replace: true });
           }}
         >
           Salir

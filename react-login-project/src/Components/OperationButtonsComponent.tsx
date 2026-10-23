@@ -10,21 +10,7 @@ interface OperationButtonsProps {
 const OperationButtons = ({ id, page, option }: OperationButtonsProps) => {
     const navigate = useNavigate();
 
-    var valor = "";
-
-    if (option === "Crear" || option === "crear"){
-        option = "new"
-        valor = "Nuevo";
-    }
-    if (option === "Editar" || option === "editar") {
-        option = `edit/${id}`;
-        valor = "Editar";
-    }
-    const handleClick = () => {
-        navigate("/" + page + "/" + option);
-    }
-
-    var color = "";
+     var color = "";
     switch (option) {
         case "Guardar":
             color = "primary"
@@ -39,9 +25,25 @@ const OperationButtons = ({ id, page, option }: OperationButtonsProps) => {
             break;
     }
 
+    var valor = "";
+
+    if (option === "Crear" || option === "crear"){
+        option = "new"
+        valor = "Nuevo";
+    }
+    if (option === "Editar" || option === "editar") {
+        option = `edit/${id}`;
+        valor = "Editar";
+    }
+    const handleClick = () => {
+        navigate("/" + page + "/" + option);
+    }
+
+   
+
     return (
         <Button variant={color} onClick={handleClick}>
-            <i className="bi bi-pencil-fill me-2"></i>
+            {/* <i className="bi bi-pencil-fill me-2"></i> */}
             {valor}
         </Button>
     );

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import Services from "./Pages/Services";
@@ -9,11 +9,17 @@ import Signup from "./Pages/Signup";
 import NewRecordForm from "./Pages/NewRecordForm";
 import CategoriesEdit from "./Pages/Categories/CategoriesEdit";
 
+function RootRoute() {
+  return localStorage.getItem("token")
+    ? <Navigate to="/home" replace />
+    : <Login />;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<RootRoute />} />
         <Route path="/signup" element={<Signup />} />
         <Route
           element={

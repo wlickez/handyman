@@ -19,7 +19,7 @@ export default function NavbarComponent() {
           </Nav.Link>
         </Nav>
         <Button
-          className="btn btn-danger"
+          variant="link"
           onClick={() => {
             localStorage.removeItem("token");
             n("/", { replace: true });

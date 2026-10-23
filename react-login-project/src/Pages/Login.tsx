@@ -29,7 +29,7 @@ export default function Login() {
   return (
     <Container fluid className="vh-100">
       <Row className="h-100 justify-content-center align-items-center">
-        <Col md={4}>
+        <Col xs={12} sm={6} md={4} lg={3}>
           <Card>
             <Card.Body>
               <h3>Iniciar Sesión</h3>
@@ -42,6 +42,7 @@ export default function Login() {
                   <Form.Control
                     value={usuario}
                     onChange={(event) => setUsuario(event.target.value)}
+                    
                   />
                 </Form.Group>
                 <Form.Group className="mb-3">

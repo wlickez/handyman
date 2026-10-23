@@ -1,19 +1,48 @@
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import newRecordRoutesType from "../Models/NewRecordRoutes.enum";
 
 interface OperationButtonsProps {
-    page: keyof typeof newRecordRoutesType;
+    id: number,
+    page: string,
+    option: string
 }
 
-const OperationButtons = ({ page }: OperationButtonsProps, option: string) => {
+const OperationButtons = ({ id, page, option }: OperationButtonsProps) => {
     const navigate = useNavigate();
 
-    const handleClick = () => navigate(newRecordRoutesType[page]);
+    var valor = "";
+
+    if (option === "Crear" || option === "crear"){
+        option = "new"
+        valor = "Nuevo";
+    }
+    if (option === "Editar" || option === "editar") {
+        option = `edit/${id}`;
+        valor = "Editar";
+    }
+    const handleClick = () => {
+        navigate("/" + page + "/" + option);
+    }
+
+    var color = "";
+    switch (option) {
+        case "Guardar":
+            color = "primary"
+            break;
+        case "Editar":
+            color = "warning";
+            break;
+        case "Crear":
+            color = "success";
+            break;
+        default:
+            break;
+    }
 
     return (
-        <Button variant="primary" type="button" onClick={handleClick}>
-            Nuevo
+        <Button variant={color} onClick={handleClick}>
+            <i className="bi bi-pencil-fill me-2"></i>
+            {valor}
         </Button>
     );
 };

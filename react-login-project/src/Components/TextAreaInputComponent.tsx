@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, InputGroup } from "react-bootstrap";
 
 
@@ -20,10 +20,6 @@ const TextAreaInput = ({ placeholder, onChange }: TextAreaInputProps) => {
             setHandler(() => (value: string) => setText(value));
         }
     }, [onChange]);
-
-    const handleClick = () => {
-        console.log("Text", text);
-    }
 
     if (placeholder === "Buscas algún servicio en especial?") 
         placeholder = "Busca algún servicio en especial?";

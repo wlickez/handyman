@@ -20,6 +20,33 @@ namespace HandyMan.API.Controllers
             _dBService = dBService;
             _configuration = configuration;
         }
+
+        [Route("byId")]
+        [HttpGet]
+        public async Task<IActionResult> ById([FromQuery] int id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                // Implement logic to retrieve categories from the database
+                var categories = await _dBService.SelectEntity(
+                    "SELECT * FROM [HANDYMAN.TASK_CATEGORY] WHERE Id = @id ORDER BY Description",
+                    false,
+                    [new ParametroSql("@id", id)],
+                    null);
+
+                _response = new ResponseBuilder<HandymanTaskCategory>()
+                    .SetSuccess(true)
+                    .SetMessage("Categories retrieved successfully")
+                    .SetResult(categories.ToList())
+                    .Build();
+                return Ok(categories);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new ResponseBuilder<HandymanTaskCategory>().SetMessage(ex.Message).Build());
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetCategories(int top = 10)
         {
@@ -66,6 +93,47 @@ namespace HandyMan.API.Controllers
                 return Ok(new ResponseBuilder<string>()
                     .SetSuccess(true)
                     .SetMessage("Categoría creada correctamente.")
+                    .SetResult([""])
+                    .Build());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new ResponseBuilder<string>()
+                    .SetSuccess(false)
+                    .SetMessage(ex.Message)
+                    .SetResult([""])
+                    .Build());
+            }
+        }
+
+        [Authorize]
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CreateCategoryRequest category)
+        {
+            try
+            {
+                string result = await _dBService.UpdateEntity(
+                    "update [HANDYMAN.TASK_CATEGORY] " +
+                    "set Description = @description, Icon = @icon " +
+                    "where Id = @id",
+                    false,
+                    [
+                        new ParametroSql("@id", id),
+                        new ParametroSql("@description", category.Description),
+                        new ParametroSql("@icon", category.Icon)
+                    ],
+                    null);
+
+                if (!string.IsNullOrEmpty(result))
+                    return StatusCode(503, new ResponseBuilder<string>()
+                        .SetSuccess(false)
+                        .SetMessage(result)
+                        .SetResult([""])
+                        .Build());
+
+                return Ok(new ResponseBuilder<string>()
+                    .SetSuccess(true)
+                    .SetMessage("Categoría actualizada correctamente.")
                     .SetResult([""])
                     .Build());
             }

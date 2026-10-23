@@ -29,6 +29,16 @@ class ApiFetchService {
     return (data) as T;
   }
 
+  async put<T = unknown>(complemento: string, body: unknown): Promise<T> {
+    const response = await fetch(`${this.baseUrl}${complemento}`, {
+      method: "PUT",
+      headers: this.getHeaders(),
+      body: JSON.stringify(body),
+    });
+
+    return (await response.json()) as T;
+  }
+
   private getHeaders(): HeadersInit {
     const token = localStorage.getItem("token");
     return {

@@ -1,7 +1,7 @@
 import { Col, Container, Row } from "react-bootstrap";
 import TextAreaInput from "../../Components/TextAreaInputComponent";
 import { SetStateAction, useEffect, useState } from "react";
-import Category from "../../Models/Category";
+import Category from "../../Models/CategoryDTO";
 import apiService from "../../Services/ApiFetchService";
 import OperationButtons from "../../Components/OperationButtonsComponent";
 import CardComponent from "../../Components/CardComponent";

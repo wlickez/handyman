@@ -10,7 +10,7 @@ import NewRecordForm from "./Pages/NewRecordForm";
 import CategoriesEdit from "./Pages/Categories/CategoriesEdit";
 
 function RootRoute() {
-  return localStorage.getItem("token")
+  return sessionStorage.getItem("token")
     ? <Navigate to="/home" replace />
     : <Login />;
 }

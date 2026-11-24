@@ -1,4 +1,4 @@
-class Category {
+class CategoryDTO {
     id: number;
     description: string;
     statusId: number;
@@ -12,4 +12,4 @@ class Category {
     }
 }
 
-export default Category;
+export default CategoryDTO;

@@ -21,7 +21,7 @@ export default function NavbarComponent() {
         <Button
           variant="link"
           onClick={() => {
-            localStorage.removeItem("token");
+            sessionStorage.removeItem("token");
             n("/", { replace: true });
           }}
         >

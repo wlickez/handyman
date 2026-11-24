@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Alert, Button, Card, Container, Form, Spinner } from "react-bootstrap";
 import apiService from "../../Services/ApiFetchService";
-import Category from "../../Models/Category";
+import Category from "../../Models/CategoryDTO";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 const CategoriesEdit = () => {

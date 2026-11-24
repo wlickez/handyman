@@ -6,5 +6,5 @@ type PrivateRouteProps = {
 };
 
 export default function PrivateRoute({ children }: PrivateRouteProps) {
-  return localStorage.getItem("token") ? children : <Navigate to="/" />;
+  return sessionStorage.getItem("token") ? children : <Navigate to="/" />;
 }

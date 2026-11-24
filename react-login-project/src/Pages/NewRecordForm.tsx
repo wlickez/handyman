@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { Alert, Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import apiService from "../Services/ApiFetchService";
-import type Category from "../Models/Category";
+import type Category from "../Models/CategoryDTO";
 import ResponseApi from "../Models/ResponseApi";
 
 type NewRecordPage = "categories" | "services" | "providers";

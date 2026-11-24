@@ -1,6 +1,6 @@
 class ApiFetchService {
   private static instance: ApiFetchService | null = null;
-  private readonly baseUrl = "https://localhost:7253/api/";
+  private readonly baseUrl = process.env.REACT_APP_API_BASE_URL;
 
   constructor() {
     if (ApiFetchService.instance) {
@@ -17,11 +17,11 @@ class ApiFetchService {
     return (await response.json()) as T;
   }
 
-  async post<T = unknown>(complemento: string, body: unknown): Promise<T> {
+  async post<T = unknown>(complemento: string, body: unknown): Promise<T> { 
     const response = await fetch(`${this.baseUrl}${complemento}`, {
       method: "POST",
       headers: this.getHeaders(),
-      body: JSON.stringify(body),
+      body: JSON.stringify(body)
     });
 
     const data = await response.json();
@@ -40,7 +40,7 @@ class ApiFetchService {
   }
 
   private getHeaders(): HeadersInit {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     return {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),

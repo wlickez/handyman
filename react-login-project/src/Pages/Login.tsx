@@ -2,7 +2,8 @@ import { useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Alert, Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import apiService from "../Services/ApiFetchService";
-import ResponseApi from "../Models/ResponseApi";
+import { Response } from "../Models/Response/Response";
+import DepartamentoDTO from "../Models/DepartamentoDTO";
 
 export default function Login() {
   const [usuario, setUsuario] = useState("");
@@ -14,16 +15,30 @@ export default function Login() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    apiService.post<ResponseApi>("Login/login", { email: usuario, password: password })
-        .then(data => {
-            if (data.isSuccess) {
-                localStorage.setItem("token", data.result[0]);
+    apiService.post<Response>("auth/login", { correo: usuario, contrasena: password })
+      .then(data => {
+        if (data.exito) {
+          console.log(data);
+          sessionStorage.setItem("token", JSON.stringify(data.datos));
+
+
+          //consultando departamentos y colocandolos en la session storga
+          const responseDeptos = apiService.get<Response>("departamentos")
+            .then(data => {
+              if (data.exito) {
+                sessionStorage.setItem("departamentos", JSON.stringify(data.datos));
                 navigate("/home");
-            }
-        })
-        .catch(error => {
-            window.alert("Error al iniciar sesión: " + error.message);
-        })
+              }
+            })
+            .catch(error => {
+              window.alert("Error al intentar cargar los departamentos: " + error.message);
+            });
+
+        }
+      })
+      .catch(error => {
+        window.alert("Error al iniciar sesión: " + error.message);
+      })
   };
 
   return (
@@ -42,7 +57,7 @@ export default function Login() {
                   <Form.Control
                     value={usuario}
                     onChange={(event) => setUsuario(event.target.value)}
-                    
+
                   />
                 </Form.Group>
                 <Form.Group className="mb-3">
